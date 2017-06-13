@@ -22,4 +22,4 @@ docker-compose up
 ```
 After running ```run.sh``` to Yadage Web User Interface is accessible at (http://localhost:8088).
 
-![Screen Shot](https://raw.githubusercontent.com/heikomuller/yadage-as-a-web-service/master/images/yadage-screenshot.png)
+![Screen Shot](https://raw.githubusercontent.com/heikomuller/yadage-as-a-web-service/90cdfc718b78de192910dfd14bcf3d267a40c752/images/yadage-screenshot.png)
