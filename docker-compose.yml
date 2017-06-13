@@ -45,6 +45,7 @@ services:
             - "8088:8088"
         volumes:
             - ./web:/var/www/config
+            - ./sites:/etc/nginx/sites-enabled/
         links:
             - engine:engine-server
             - template:template-server
