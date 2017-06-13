@@ -1,0 +1,51 @@
+version: "2"
+services:
+    db:
+        image: mongo:3.0.2
+    redis:
+        image: redis:latest
+        ports:
+            - "6379:6379"
+    celery:
+        environment:
+            - PACKTIVITY_CELERY_REDIS_BROKER=redis://redis
+            - C_FORCE_ROOT=true
+        command: "/app/run_celery.sh"
+        volumes:
+            - ./data:/data
+            - /var/run/docker.sock:/var/run/docker.sock
+        links:
+            - redis
+        image: heikomueller/yadage-engine-celery
+    engine:
+        command: python yadageengine
+        ports:
+            - "25011:25011"
+        volumes:
+            - ./config:/config
+            - ./data:/data
+        environment:
+            - YADAGE_ENGINE_CONFIG=/config/engine.yaml
+            - PACKTIVITY_CELERY_REDIS_BROKER=redis://redis
+        links:
+            - redis
+            - db:database
+            - template:template-server
+        image: heikomueller/yadage-engine-api
+    template:
+        ports:
+            - "25012:25012"
+        volumes:
+            - ./config:/config
+        environment:
+            - YADAGEWFREPO_CONFIG=/config/template.yaml
+        image: heikomueller/yadage-workflow-repository
+    web:
+        ports:
+            - "8088:8088"
+        volumes:
+            - ./web:/var/www/config
+        links:
+            - engine:engine-server
+            - template:template-server
+        image: heikomueller/yadage-webui
